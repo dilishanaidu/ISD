@@ -1,10 +1,15 @@
+package Assignment1;
+
+
 import java.awt.*;       
 import java.awt.event.*; 
-import javax.swing.*;    
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import static javax.swing.GroupLayout.Alignment.*;
 
 @SuppressWarnings("serial")
 public class Showshape extends JFrame {
@@ -19,11 +24,14 @@ public class Showshape extends JFrame {
    private DrawCanvas canvas; 
    private String msg ="Hello World";
    String[] fontstyleItems = new String[] {"Regular","Italic", "Bold","Bold&Italic"};
+   String[] fontsizeItems = new String[] {"8","10","12","14","16","18","20","22","24","26","28","30"};
+   private JRadioButton rec, oval,roundrec;
+   
    private JButton fgcolor, bgcolor;
-   private JButton rec,Oval,roundrec;
+   //private JButton rec,Oval,roundrec;
    private Color c = Color.BLACK;
    private Color c1 = Color.GREEN;
-   private int sz = 20,X1= 300,Y1 = 300;
+   private int sz = 12,X1= 300,Y1 = 300;
    private String shape = "RECT";
    public Showshape() {
 	  JPanel panel = new JPanel(new FlowLayout());
@@ -31,10 +39,15 @@ public class Showshape extends JFrame {
 	  
       JPanel pn = new JPanel(new FlowLayout());
       JPanel pn1 = new JPanel();
-      BoxLayout boxLayout = new BoxLayout(pn1, BoxLayout.Y_AXIS);
-      pn1.setLayout(boxLayout);
-      panel.add(pn1);
-	  panel.add(pn);
+      //BoxLayout boxLayout = new BoxLayout(pn1, BoxLayout.Y_AXIS);
+      
+      GroupLayout groupLayout = new GroupLayout(pn1); 
+      JSeparator s = new JSeparator(); 
+      s.setOrientation(SwingConstants.HORIZONTAL); 
+      
+      
+      
+	  
       DocumentListener dl = new DocumentListener() {
 
 		@Override	
@@ -67,17 +80,54 @@ public class Showshape extends JFrame {
       pn.add(t);
       t.getDocument().addDocumentListener(dl); 	 
       
-      SpinnerModel spinnerModel = new SpinnerNumberModel(sz,10,30,1);
-      JSpinner spinner = new JSpinner(spinnerModel);
-      spinner.addChangeListener(new ChangeListener() {
-		@Override
-		public void stateChanged(ChangeEvent e) {
-			// TODO Auto-generated method stub
-			sz = (int) spinnerModel.getValue();
-			canvas.repaint();
-		}
-      }); 
-      pn.add(spinner);
+      JComboBox<String> fontsizeList = new JComboBox<>(fontsizeItems);
+      fontsizeList.setAlignmentX(Component.LEFT_ALIGNMENT);
+      pn.add(fontsizeList);
+      fontsizeList.setMaximumSize( fontsizeList.getPreferredSize() );
+      //shapeList.setSelectedItem("R");
+      
+      fontsizeList.addActionListener(new ActionListener() {
+    	  
+    	    @Override
+    	    public void actionPerformed(ActionEvent event) {
+    	        JComboBox<String> combo = (JComboBox<String>) event.getSource();
+    	        String selectedfontsize = (String) combo.getSelectedItem();
+    	 
+    	        if (selectedfontsize.equals("8")) {
+    	        	sz= 8; canvas.repaint();	
+    	        }
+    	        else if (selectedfontsize.equals("10")) {
+    	        	sz=10; canvas.repaint();
+    	        }else if (selectedfontsize.equals("12")) {
+    	        	sz=12; canvas.repaint();
+    	        }else if (selectedfontsize.equals("14")) {
+    	        	sz=14; canvas.repaint();
+    	        }else if (selectedfontsize.equals("16")) {
+    	        	sz=16; canvas.repaint();
+    	        }
+    	        else if (selectedfontsize.equals("18")) {
+    	        	sz=18; canvas.repaint();
+    	        }
+    	        else if (selectedfontsize.equals("20")) {
+    	        	sz=20; canvas.repaint();
+    	        }
+    	        else if (selectedfontsize.equals("22")) {
+    	        	sz=22; canvas.repaint();
+    	        }
+    	        else if (selectedfontsize.equals("24")) {
+    	        	sz=24; canvas.repaint();
+    	        }
+    	        else if (selectedfontsize.equals("26")) {
+    	        	sz=26; canvas.repaint();
+    	        }
+    	        else if (selectedfontsize.equals("28")) {
+    	        	sz=28; canvas.repaint();
+    	        }
+    	        else if (selectedfontsize.equals("30")) {
+    	        	sz=30; canvas.repaint();
+    	        }
+    	    }
+    	});
       
       JComboBox<String> fontstyleList = new JComboBox<>(fontstyleItems);
       fontstyleList.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -106,7 +156,7 @@ public class Showshape extends JFrame {
     	});
 
     	      fgcolor = new JButton("foregroundcolor");
-    	      pn1.add(fgcolor);
+    	      //pn1.add(fgcolor);
     	      fgcolor.addActionListener(new ActionListener() {
     	            public void actionPerformed(ActionEvent evt) {
     	            c = JColorChooser.showDialog(Showshape.this,"Please choose a color",c);
@@ -119,7 +169,7 @@ public class Showshape extends JFrame {
     	      });
     	      
     	      bgcolor = new JButton("backgroundcolor");
-    	      pn1.add(bgcolor);
+    	      //pn1.add(bgcolor);
     	      bgcolor.addActionListener(new ActionListener() {
     	            public void actionPerformed(ActionEvent evt) {
     	            c1 = JColorChooser.showDialog(Showshape.this,"Please choose a color",c1);
@@ -131,30 +181,35 @@ public class Showshape extends JFrame {
     	          }
     	      });
     	      
-    	      rec = new JButton("Rectangle");
+    	      ButtonGroup group = new ButtonGroup();
+    	      rec = new JRadioButton("Rectangle");
+    	      group.add(rec);
     	      pn1.add(rec);
     	      rec.addActionListener(new ActionListener() {
     	            public void actionPerformed(ActionEvent evt) {
     	            shape ="RECT"; canvas.repaint(); }
     	      });
     	      
-    	      Oval = new JButton("Oval");
-    	      pn1.add(Oval);
-    	      Oval.addActionListener(new ActionListener() {
+    	      oval = new JRadioButton("Oval");
+    	      pn1.add(oval);
+    	      group.add(oval);
+    	      oval.addActionListener(new ActionListener() {
     	            public void actionPerformed(ActionEvent evt) {
     	            shape ="OVAL"; canvas.repaint(); }
     	      });
     	      
-    	      roundrec = new JButton("RoundedRectangle");
+    	      roundrec = new JRadioButton("RoundedRectangle");
     	      pn1.add(roundrec);
+    	      group.add(roundrec);
     	      roundrec.addActionListener(new ActionListener() {
     	            public void actionPerformed(ActionEvent evt) {
     	            shape = "ROUNDRECT"; canvas.repaint(); }
     	      });
       
-    	      SpinnerModel spinnerModel1 = new SpinnerNumberModel(100,50,300,1);
-    	      JSpinner spinner1 = new JSpinner(spinnerModel1);
-    	      spinner1.addChangeListener(new ChangeListener() {
+    	      SpinnerModel spinnerModel1 = new SpinnerNumberModel(100,50,500,50);
+    	      JLabel shapeWidthLabel = new JLabel("Shape Width"); 
+    	      JSpinner shapeWidth = new JSpinner(spinnerModel1);
+    	      shapeWidth.addChangeListener(new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					// TODO Auto-generated method stub
@@ -163,11 +218,12 @@ public class Showshape extends JFrame {
 				}
     	      }); 
     	      
-    	      pn1.add(spinner1);
+    	      //pn1.add(spinner1);
     	      
-    	      SpinnerModel spinnerModel2 = new SpinnerNumberModel(100,50,300,1);
-    	      JSpinner spinner2 = new JSpinner(spinnerModel2);
-    	      spinner2.addChangeListener(new ChangeListener() {
+    	      SpinnerModel spinnerModel2 = new SpinnerNumberModel(100,50,500,50);
+    	      JLabel shapeHeightLabel = new JLabel("Shape Height");
+    	      JSpinner shapeHeight = new JSpinner(spinnerModel2);
+    	      shapeHeight.addChangeListener(new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					// TODO Auto-generated method stub
@@ -175,7 +231,120 @@ public class Showshape extends JFrame {
 					canvas.repaint();
 				}
     	      }); 
-    	      pn1.add(spinner2);
+    	      //pn1.add(spinner2);
+    	      
+    	      JLabel shapeAttributes = new JLabel("Shape Attributes");
+    	      JLabel textAttributes = new JLabel("Text Attributes");
+    	      JLabel fontSizeLabel = new JLabel("Font Size");
+    	      JLabel fontStyleLabel = new JLabel("Font Style");
+    	     
+    	      
+    	      TitledBorder shapeBorder = BorderFactory.createTitledBorder("Shape Attributes");
+    	      TitledBorder textBorder = BorderFactory.createTitledBorder("Text Attributes");
+    	      
+    	      
+    	      groupLayout.setAutoCreateGaps(true);
+    	      groupLayout.setAutoCreateContainerGaps(true); 
+    	     
+    	      groupLayout.setHorizontalGroup(
+    	    		  groupLayout.createSequentialGroup() 
+    	    		  .addGroup(groupLayout.createParallelGroup(LEADING)
+    	    				  .addComponent(label)
+    	    				  .addGroup(groupLayout.createParallelGroup(LEADING)
+    	    						  .addGroup(groupLayout.createSequentialGroup() 
+    	    								  .addComponent(shapeAttributes)
+    	    								  )
+    	    						  .addComponent(rec) 
+    	  	        				  .addComponent(oval) 
+    	  	        				  .addComponent(roundrec)
+    	  	        				 
+    	    						  )
+
+    	    				  .addComponent(textAttributes)
+    	    				  .addComponent(fontStyleLabel)
+    	    				  .addComponent(fontSizeLabel)
+    	    				  
+    	    				  )
+    	    		  
+
+    	    	        .addGroup(groupLayout.createParallelGroup(LEADING)
+    	    	        		.addComponent(t)
+    	    	        		.addGroup(groupLayout.createSequentialGroup()
+    	    	        		.addComponent(bgcolor)
+    	    	        		.addComponent(fgcolor))
+    	    	        		.addGroup(groupLayout.createParallelGroup(TRAILING)
+    	    	        				.addGroup(groupLayout.createSequentialGroup() 
+    		  	        						.addComponent(shapeHeightLabel)
+    		  	        						.addComponent(shapeHeight)
+    		  	        						  )
+    		  	        				.addGroup(groupLayout.createSequentialGroup() 
+    		  	        						.addComponent(shapeWidthLabel)
+    		  	        						.addComponent(shapeWidth)
+    		  	        						  )
+    	    	        				)
+    	    	        		
+    	        				.addComponent(fontstyleList)
+    	        				.addComponent(fontsizeList)
+    	        				
+    	    	        		)
+    	    	        );
+    	    	  
+    	    	   
+    	      
+    	      groupLayout.setVerticalGroup(groupLayout.createSequentialGroup() 
+    	    		  .addGroup(groupLayout.createParallelGroup(BASELINE) 
+    	    	        // Adding the JButton "btn1"
+    	    		  	.addComponent(label)
+    	    		  	.addComponent(t))
+    	    		  
+    	    		  .addGroup(groupLayout.createParallelGroup(BASELINE).addGap(50)
+    	    		  	.addComponent(bgcolor)
+    	      			.addComponent(fgcolor))
+    	    		  
+    	    		  .addGroup(groupLayout.createParallelGroup(BASELINE)
+    	    				  .addComponent(shapeAttributes)
+    	    				  )
+    	    		  .addGroup(groupLayout.createParallelGroup(BASELINE).addGap(100)
+    	    				  .addGroup(groupLayout.createSequentialGroup()
+    	    	    	    		  .addComponent(rec)
+    	    	    	    		  .addComponent(oval) 
+    	    	    	    		  .addComponent(roundrec)	  
+    	    						  )
+    	    				  .addGroup(groupLayout.createSequentialGroup()
+    	    						  .addGroup(groupLayout.createParallelGroup(BASELINE)
+    	    								  .addComponent(shapeHeightLabel)
+    	    								  .addComponent(shapeHeight)
+    	    								  )
+    	    						  .addGroup(groupLayout.createParallelGroup(BASELINE)
+    	    								  .addComponent(shapeWidthLabel)
+    	    								  .addComponent(shapeWidth)
+    	    								  )
+    	  	    	        		)
+
+    	    				  )
+    	    		  
+    	    		  .addGroup(groupLayout.createParallelGroup(BASELINE)
+    	    				  .addComponent(textAttributes)
+    	    				  )
+    	    		 
+    	    		  .addGroup(groupLayout.createParallelGroup(BASELINE)
+    	    				  .addComponent(fontStyleLabel)
+  	        				.addComponent(fontstyleList))
+    	    		  .addGroup(groupLayout.createParallelGroup(BASELINE)
+    	    				  .addComponent(fontSizeLabel)
+  	        				.addComponent(fontsizeList))
+    	    		  
+    	      			);
+    	      
+    	      groupLayout.linkSize(fontsizeList, fontstyleList);
+    	      //groupLayout.linkSize(shapeHeight, shapeWidth);
+    	      pn1.setLayout(groupLayout);
+    	      //pn1.setSize(new Dimension(width, height));
+    	      panel.setSize(new Dimension(width, height));
+    	      //panel.add(pn);
+    	      panel.add(pn1);
+    	    		  
+    	    		  
     	      
       // Set up a custom drawing JPanel
       canvas = new DrawCanvas();
@@ -235,7 +404,8 @@ public class Showshape extends JFrame {
 			}
       if(fm.stringWidth(msg) > Y1)
       {
-    	  sz = 10;
+    	  msg = "Text too long";
+    	  //sz = 12;
     	  f = new Font("TimesRoman",fntstyle,sz);
           setFont(f);
       }
@@ -253,6 +423,3 @@ public class Showshape extends JFrame {
       });
    }
 }
-
- 
-
